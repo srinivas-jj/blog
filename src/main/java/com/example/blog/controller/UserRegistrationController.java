@@ -13,10 +13,6 @@ import com.example.blog.service.UserService;
 
 import jakarta.validation.Valid;
 
-
-
-
-
 @RestController
 @RequestMapping("/api/auth")
 public class UserRegistrationController {
@@ -27,7 +23,7 @@ public class UserRegistrationController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")   
+    @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody @Valid  UserRegistrationDto userRegistrationDto){
 
         UserDetail registeredUser =  userService.registerUser(userRegistrationDto);

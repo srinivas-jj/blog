@@ -2,6 +2,8 @@ package com.example.blog.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -29,6 +32,21 @@ public class UserDetail {
     private String email;
     @Column(name = "password")
     private String passWord;
+
+    @OneToMany(mappedBy="author", cascade=CascadeType.ALL)
+    private List<BlogPost> blogPost;
+
+    @OneToMany(mappedBy="userDetail", cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+    @JsonManagedReference 
+    private List<Comment> comment;
+
+    public List<BlogPost> getBlogPost() {
+        return blogPost;
+    }
+
+    public void setBlogPost(List<BlogPost> blogPost) {
+        this.blogPost = blogPost;
+    }
 
     @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH},
                 fetch=FetchType.LAZY)

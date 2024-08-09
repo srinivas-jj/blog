@@ -1,5 +1,7 @@
 package com.example.blog.security;
 
+import static org.springframework.security.config.Customizer.*;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,13 +30,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> 
-               auth
-                    .requestMatchers("/api/auth/register").permitAll()
-                    .anyRequest().authenticated() )
-            .sessionManagement(sessionManagement -> sessionManagement.
-            sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
+            .authorizeHttpRequests(auth ->
+                auth
+                    .requestMatchers("/api/auth/register", "/api/login").permitAll()
+                    .anyRequest().authenticated()
+            )
+            .httpBasic(withDefaults())
+            .sessionManagement(sessionManagement -> 
+                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            );
 
         return http.build();
     }
@@ -56,6 +60,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
 }
-
