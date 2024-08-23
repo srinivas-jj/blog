@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.blog.dto.BlogPostResponse;
 import com.example.blog.model.BlogPost;
 import com.example.blog.service.BlogPostService;
 
@@ -27,31 +28,30 @@ public class BlogPostController {
     
 
     @PostMapping
-    public ResponseEntity<BlogPost> createBlogPost(@RequestBody BlogPost blogPost) {
-        BlogPost createdPost = blogPostService.createBlogPost(blogPost);
+    public ResponseEntity<BlogPostResponse> createBlogPost(@RequestBody BlogPost blogPost) {
+        BlogPostResponse createdPost = blogPostService.createBlogPost(blogPost);
         System.out.println("abcd"+createdPost);
         return ResponseEntity.ok(createdPost);
     }
 
     @GetMapping
-    public List<BlogPost> getAllBlogPosts() {
+    public List<BlogPostResponse> getAllBlogPosts() {
         return blogPostService.getAllBlogPost();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BlogPost> getBlogPostById(@PathVariable int id) {
-        BlogPost blogPost = blogPostService.getBlogPostById(id).orElseThrow(() -> new RuntimeException("Blog post not found"));
-        return ResponseEntity.ok(blogPost);
+    public BlogPostResponse getBlogPostById(@PathVariable int id) {
+        return blogPostService.getBlogPostById(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BlogPost> updateBlogPost(@PathVariable int id, @RequestBody BlogPost blogPostDetails) {
-        BlogPost updatedPost = blogPostService.updateBlogPost(id, blogPostDetails);
+    public ResponseEntity<ResponseEntity<BlogPost>> updateBlogPost(@PathVariable int id, @RequestBody BlogPost blogPostDetails) {
+        ResponseEntity<BlogPost> updatedPost = blogPostService.updateBlogPost(id, blogPostDetails);
         return ResponseEntity.ok(updatedPost);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBlogPost(@PathVariable("id") int theId) {
+    public ResponseEntity<BlogPost> deleteBlogPost(@PathVariable("id") int theId) {
         blogPostService.deleteBlogPost(theId);
         return ResponseEntity.noContent().build();
     }

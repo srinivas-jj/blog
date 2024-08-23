@@ -2,7 +2,7 @@ package com.example.blog.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -37,7 +37,7 @@ public class UserDetail {
     private List<BlogPost> blogPost;
 
     @OneToMany(mappedBy="userDetail", cascade = CascadeType.ALL,fetch=FetchType.LAZY)
-    @JsonManagedReference 
+    @JsonBackReference
     private List<Comment> comment;
 
     public List<BlogPost> getBlogPost() {

@@ -1,7 +1,6 @@
 package com.example.blog.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,34 +25,26 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("/blog/{blogPostId}")
-    public ResponseEntity<Comment> createComment(@PathVariable int blogPostId,@RequestBody CommentRequest commentRequest){
-        Comment createdComment = commentService.createComment(commentRequest.getContent(),blogPostId);
+    public ResponseEntity<CommentRequest> createComment(@PathVariable int blogPostId,@RequestBody CommentRequest commentRequest){
+        CommentRequest createdComment = commentService.createComment(commentRequest.getContent(),blogPostId);
         return ResponseEntity.ok(createdComment);
     }
-    @GetMapping
-    public ResponseEntity<List<Comment>> getAllComments(){
 
-        List<Comment> comments = commentService.getAllComments();
-
+    @GetMapping("/blog/{blogPostId}")
+    public ResponseEntity<List<CommentRequest>> getCommentById(@PathVariable int blogPostId){
+        List<CommentRequest> comments = commentService.getCommentById(blogPostId);
         return ResponseEntity.ok(comments);
-
-    }
-
-    @GetMapping("/{theId}")
-    public ResponseEntity<Comment> getCommentById(@PathVariable int theId){
-        Optional<Comment> comment = commentService.getCommentById(theId);
-        return comment.map(ResponseEntity:: ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
     
     @PutMapping("/{theId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable int theId, @RequestBody Comment commentDetails){
-        Comment updatedComment = commentService.updateComment(theId, commentDetails);
+    public ResponseEntity<ResponseEntity<Comment>> updateComment(@PathVariable int theId, @RequestBody Comment commentDetails){
+        ResponseEntity<Comment> updatedComment = commentService.updateComment(theId, commentDetails);
 
         return ResponseEntity.ok(updatedComment);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable int id){
+    public ResponseEntity<Comment> deleteComment(@PathVariable int id){
         commentService.deleteComment(id);
 
         return ResponseEntity.noContent().build();

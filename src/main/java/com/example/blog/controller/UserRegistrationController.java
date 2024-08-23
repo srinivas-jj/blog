@@ -24,15 +24,14 @@ public class UserRegistrationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody @Valid  UserRegistrationDto userRegistrationDto){
-
-        UserDetail registeredUser =  userService.registerUser(userRegistrationDto);
-
-        if(registeredUser == null){
-            return new ResponseEntity<>("Registration Failed Username already exsist",HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> registerUser(@RequestBody @Valid UserRegistrationDto userRegistrationDto) {
+        try {
+            UserDetail registeredUser = userService.registerUser(userRegistrationDto);
+            return new ResponseEntity<>("User Registered Successfully", HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
-        return new ResponseEntity<>("User Registered Successfully", HttpStatus.CREATED);
     }
-    
 }
+    
+

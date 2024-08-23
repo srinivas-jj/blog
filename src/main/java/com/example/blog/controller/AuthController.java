@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping("/api/login")
-    public ResponseEntity<String>  login(@RequestBody LoginRequestDto loginRequestDto){
+    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto){
         try {
 
             //Attempts to authenticate the user using the authenticationManager
