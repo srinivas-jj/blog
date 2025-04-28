@@ -44,14 +44,14 @@ public class CommentService {
         System.out.println("abcd"+user);
         Comment comment = new Comment();
         comment.setContent(content);
-        comment.setUserDetail(user);
+        comment.setUserDetail(user); 
         comment.setBlogPost(blogPost);
         Comment savedComment = commentRepository.save(comment);
 
         return new CommentRequest(
             savedComment.getId(),
             savedComment.getUserDetail().getUserName(),
-            savedComment.getBlogPost(),
+            savedComment.getBlogPost(),  
             savedComment.getContent());
     }
 
@@ -59,7 +59,7 @@ public class CommentService {
     public List<CommentRequest> getCommentById(int theId){
         List<Comment> comments =  commentRepository.findByBlogPostId(theId);
         return comments.stream().map(comment -> new CommentRequest(comment.getId(),
-         comment.getUserDetail().getUserName(), 
+         comment.getUserDetail().getUserName(),
          comment.getBlogPost(),
          comment.getContent())).collect(Collectors.toList());
     }
